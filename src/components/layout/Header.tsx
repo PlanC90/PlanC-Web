@@ -55,10 +55,8 @@ const Header: React.FC = () => {
             <NavLink to="/#portfolio" onClick={scrollToPortfolio}>My Portfolio</NavLink>
             {/* Links previously under 'Tools' dropdown, now directly in nav */}
             <ExternalNavLink href="https://planccoin.netlify.app/">PlanC Coin AI</ExternalNavLink>
-            <NavLink to="/#">AirDrop</NavLink> {/* Assuming this is still an internal placeholder */}
+            {/* AirDrop and Telegram Group links removed */}
             <ExternalNavLink href="https://memextoken.org">MemeX</ExternalNavLink>
-            {/* New Telegram Group Link */}
-            <ExternalNavLink href="https://t.me/PlancSpace">Telegram Group</ExternalNavLink>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -79,10 +77,8 @@ const Header: React.FC = () => {
             <MobileNavLink to="/#portfolio" onClick={scrollToPortfolio}>My Portfolio</MobileNavLink>
             {/* Links previously under 'Tools' dropdown, now directly in mobile nav */}
             <MobileExternalNavLink href="https://planccoin.netlify.app/" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>PlanC Coin AI</MobileExternalNavLink> {/* Use scrollToTop here */}
-            <MobileNavLink to="/#" onClick={() => setIsMenuOpen(false)}>AirDrop</MobileNavLink> {/* Assuming this is still an internal placeholder */}
+            {/* AirDrop and Telegram Group links removed */}
             <MobileExternalNavLink href="https://memextoken.org" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>MemeX</MobileExternalNavLink> {/* Use scrollToTop here */}
-            {/* New Telegram Group Link */}
-            <MobileExternalNavLink href="https://t.me/PlancSpace" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>Telegram Group</MobileExternalNavLink>
           </div>
         </div>
       )}
