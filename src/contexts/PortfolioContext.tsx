@@ -52,7 +52,8 @@ interface PortfolioContextType {
   portfolioPerformance7d: number; // Added 7d performance
   portfolioPerformance30d: number; // Added 30d performance
   portfolioPerformance1y: number; // Added 1y performance
-  bestPerformer: EnrichedPortfolioCoin | null;
+  bestPerformer1h: EnrichedPortfolioCoin | null; // Renamed to specify 1h
+  bestPerformer24h: EnrichedPortfolioCoin | null; // Added 24h best performer
   loading: boolean;
   error: string | null;
 }
@@ -92,7 +93,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [portfolioPerformance7d, setPortfolioPerformance7d] = useState(0); // State for 7d performance
   const [portfolioPerformance30d, setPortfolioPerformance30d] = useState(0); // State for 30d performance
   const [portfolioPerformance1y, setPortfolioPerformance1y] = useState(0); // State for 1y performance
-  const [bestPerformer, setBestPerformer] = useState<EnrichedPortfolioCoin | null>(null);
+  const [bestPerformer1h, setBestPerformer1h] = useState<EnrichedPortfolioCoin | null>(null); // State for 1h best performer
+  const [bestPerformer24h, setBestPerformer24h] = useState<EnrichedPortfolioCoin | null>(null); // State for 24h best performer
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -203,16 +205,26 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
 
           // Find best performer based on 1h change among the fixed coins
-          let best = null;
-          let highestChange = -Infinity;
+          let best1h = null;
+          let highestChange1h = -Infinity;
+
+          // Find best performer based on 24h change among the fixed coins
+          let best24h = null;
+          let highestChange24h = -Infinity;
+
 
           // Ensure enrichedCoins is an array before iterating
           if (Array.isArray(enrichedCoins)) {
             enrichedCoins.forEach(coin => {
               // Add type check for percent_change_1h before comparison
-              if (coin.percent_change_1h !== null && typeof coin.percent_change_1h === 'number' && coin.percent_change_1h > highestChange) {
-                highestChange = coin.percent_change_1h;
-                best = coin;
+              if (coin.percent_change_1h !== null && typeof coin.percent_change_1h === 'number' && coin.percent_change_1h > highestChange1h) {
+                highestChange1h = coin.percent_change_1h;
+                best1h = coin;
+              }
+               // Add type check for percent_change_24h before comparison
+              if (coin.percent_change_24h !== null && typeof coin.percent_change_24h === 'number' && coin.percent_change_24h > highestChange24h) {
+                highestChange24h = coin.percent_change_24h;
+                best24h = coin;
               }
             });
           }
@@ -224,7 +236,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           setPortfolioPerformance7d(finalPortfolioPerformance7d); // Set 7d performance state
           setPortfolioPerformance30d(finalPortfolioPerformance30d); // Set 30d performance state
           setPortfolioPerformance1y(finalPortfolioPerformance1y); // Set 1y performance state
-          setBestPerformer(best);
+          setBestPerformer1h(best1h); // Set 1h best performer state
+          setBestPerformer24h(best24h); // Set 24h best performer state
           console.log('Portfolio data fetched and processed.');
 
         } else {
@@ -235,7 +248,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
            setPortfolioPerformance7d(0); // Reset 7d performance
            setPortfolioPerformance30d(0); // Reset 30d performance
            setPortfolioPerformance1y(0); // Reset 1y performance
-           setBestPerformer(null);
+           setBestPerformer1h(null); // Reset 1h best performer
+           setBestPerformer24h(null); // Reset 24h best performer
            console.error('Invalid data format from CoinPaprika:', response.data);
         }
 
@@ -248,7 +262,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setPortfolioPerformance7d(0); // Reset 7d performance
         setPortfolioPerformance30d(0); // Reset 30d performance
         setPortfolioPerformance1y(0); // Reset 1y performance
-        setBestPerformer(null);
+        setBestPerformer1h(null); // Reset 1h best performer
+        setBestPerformer24h(null); // Reset 24h best performer
       } finally {
         setLoading(false);
       }
@@ -268,7 +283,8 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     portfolioPerformance7d, // Provide 7d performance
     portfolioPerformance30d, // Provide 30d performance
     portfolioPerformance1y, // Provide 1y performance
-    bestPerformer,
+    bestPerformer1h, // Provide 1h best performer
+    bestPerformer24h, // Provide 24h best performer
     loading,
     error,
   };

@@ -15,7 +15,8 @@ const PortfolioTracker: React.FC = () => {
     portfolioPerformance7d,
     portfolioPerformance30d,
     portfolioPerformance1y,
-    bestPerformer,
+    bestPerformer1h, // Use the new name
+    bestPerformer24h, // Consume the new 24h best performer
     loading,
     error
   } = usePortfolio();
@@ -157,40 +158,75 @@ const PortfolioTracker: React.FC = () => {
         PlanC Portfolio
       </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-8">
+      {/* Adjusted grid layout to accommodate 6 items */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
         {renderPerformance("1h Performance", portfolioPerformance1h)}
         {renderPerformance("7d Performance", portfolioPerformance7d)}
         {renderPerformance("30d Performance", portfolioPerformance30d)}
         {renderPerformance("1y Performance", portfolioPerformance1y)}
 
-        {bestPerformer ? (
-          <div className="bg-slate-800/50 rounded-lg p-4 col-span-full sm:col-span-1 xl:col-span-1">
+        {/* Best Performer (1h) Box */}
+        {bestPerformer1h ? (
+          <div className="bg-slate-800/50 rounded-lg p-4"> {/* Removed col-span classes */}
             <h3 className="text-gray-400 text-sm mb-1">Best Performer (1h)</h3>
             <div className="flex items-center">
-              <div className="text-white font-bold">{bestPerformer.name} ({bestPerformer.symbol})</div>
-              {bestPerformer.percent_change_1h !== null && typeof bestPerformer.percent_change_1h === 'number' && (
-                 <div className={`ml-2 flex items-center ${bestPerformer.percent_change_1h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                   {bestPerformer.percent_change_1h >= 0 ? (
+              <div className="text-white font-bold">{bestPerformer1h.name} ({bestPerformer1h.symbol})</div>
+              {bestPerformer1h.percent_change_1h !== null && typeof bestPerformer1h.percent_change_1h === 'number' && (
+                 <div className={`ml-2 flex items-center ${bestPerformer1h.percent_change_1h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                   {bestPerformer1h.percent_change_1h >= 0 ? (
                      <TrendingUp size={16} className="mr-1" />
                    ) : (
                      <TrendingDown size={16} className="mr-1" />
                    )}
-                   {bestPerformer.percent_change_1h >= 0 ? '+' : ''}{bestPerformer.percent_change_1h.toFixed(2)}%
+                   {bestPerformer1h.percent_change_1h >= 0 ? '+' : ''}{bestPerformer1h.percent_change_1h.toFixed(2)}%
                  </div>
               )}
             </div>
             {/* Display the current price of the best performer */}
             <div className="text-sm text-gray-400 mt-1">
-              Price: {formatPrice(bestPerformer.price_usd)}
+              Price: {formatPrice(bestPerformer1h.price_usd)}
             </div>
              {/* Add 24h Volume */}
             <div className="text-sm text-gray-400 mt-1">
-              24h Volume: {formatVolume(bestPerformer.volume_24h)}
+              24h Volume: {formatVolume(bestPerformer1h.volume_24h)}
             </div>
           </div>
         ) : (
-          <div className="bg-slate-800/50 rounded-lg p-4 col-span-full sm:col-span-1 xl:col-span-1">
-            <h3 className="text-gray-400 text-sm mb-1">Best Performer</h3>
+          <div className="bg-slate-800/50 rounded-lg p-4"> {/* Removed col-span classes */}
+            <h3 className="text-gray-400 text-sm mb-1">Best Performer (1h)</h3>
+            <div className="text-gray-300 text-sm">No data to determine best performer.</div>
+          </div>
+        )}
+
+         {/* Best Performer (24h) Box - NEW */}
+        {bestPerformer24h ? (
+          <div className="bg-slate-800/50 rounded-lg p-4"> {/* Removed col-span classes */}
+            <h3 className="text-gray-400 text-sm mb-1">Best Performer (24h)</h3>
+            <div className="flex items-center">
+              <div className="text-white font-bold">{bestPerformer24h.name} ({bestPerformer24h.symbol})</div>
+              {bestPerformer24h.percent_change_24h !== null && typeof bestPerformer24h.percent_change_24h === 'number' && (
+                 <div className={`ml-2 flex items-center ${bestPerformer24h.percent_change_24h >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                   {bestPerformer24h.percent_change_24h >= 0 ? (
+                     <TrendingUp size={16} className="mr-1" />
+                   ) : (
+                     <TrendingDown size={16} className="mr-1" />
+                   )}
+                   {bestPerformer24h.percent_change_24h >= 0 ? '+' : ''}{bestPerformer24h.percent_change_24h.toFixed(2)}%
+                 </div>
+              )}
+            </div>
+            {/* Display the current price of the best performer */}
+            <div className="text-sm text-gray-400 mt-1">
+              Price: {formatPrice(bestPerformer24h.price_usd)}
+            </div>
+             {/* Add 24h Volume */}
+            <div className="text-sm text-gray-400 mt-1">
+              24h Volume: {formatVolume(bestPerformer24h.volume_24h)}
+            </div>
+          </div>
+        ) : (
+          <div className="bg-slate-800/50 rounded-lg p-4"> {/* Removed col-span classes */}
+            <h3 className="text-gray-400 text-sm mb-1">Best Performer (24h)</h3>
             <div className="text-gray-300 text-sm">No data to determine best performer.</div>
           </div>
         )}
