@@ -2,74 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --primary: rgb(59, 130, 246);
-  --secondary: rgb(20, 184, 166);
-  --accent: rgb(249, 115, 22);
-  --success: rgb(34, 197, 94);
-  --warning: rgb(234, 179, 8);
-  --error: rgb(239, 68, 68);
-  --background: rgb(15, 23, 42);
-  --card: rgb(30, 41, 59);
-  --card-hover: rgb(51, 65, 85);
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  /* Updated background image URL */
+/* Remove the background image rule */
+/* body {
   background-image: url('https://planc.space/bitcoin.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  background-repeat: no-repeat;
-  /* Add padding at the bottom to prevent content from being hidden by the fixed bottom nav */
-  padding-bottom: 4rem; /* Adjust based on the height of your bottom nav */
+} */
+
+/* Add scroll-behavior smooth for smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* Keep the dark overlay for readability */
-  background-color: rgba(15, 23, 42, 0.92);
-  z-index: -1;
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
 }
 
-.glass-card {
-  background: rgba(30, 41, 59, 0.7);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+::-webkit-scrollbar-track {
+  background: #1e293b; /* Track color (slate-800) */
 }
 
-.animate-pulse-slow {
-  animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+::-webkit-scrollbar-thumb {
+  background: #475569; /* Thumb color (slate-600) */
+  border-radius: 4px; /* Rounded corners for the thumb */
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.gradient-text {
-  background: linear-gradient(90deg, #3b82f6, #14b8a6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.rise-gradient {
-  background: linear-gradient(90deg, #22c55e, #16a34a);
-}
-
-.fall-gradient {
-  background: linear-gradient(90deg, #ef4444, #b91c1c);
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b; /* Thumb color on hover (slate-500) */
 }
