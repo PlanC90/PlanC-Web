@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'; // Added useMemo
+import React, { useState, useMemo } from 'react';
 import { usePortfolio } from '../../contexts/PortfolioContext';
 import { Wallet, TrendingUp, TrendingDown } from 'lucide-react';
 
@@ -66,6 +66,22 @@ const PortfolioTracker: React.FC = () => {
       </span>
     );
   };
+
+  // Helper function to format large numbers for volume
+  const formatVolume = (volume: number | null): string => {
+    if (volume === null || typeof volume !== 'number') {
+      return 'N/A';
+    }
+    // Simple formatting for millions/billions
+    if (volume >= 1e9) {
+      return '$' + (volume / 1e9).toFixed(2) + 'B';
+    }
+    if (volume >= 1e6) {
+      return '$' + (volume / 1e6).toFixed(2) + 'M';
+    }
+    return '$' + volume.toFixed(2);
+  };
+
 
   // Handle sorting logic
   const handleSort = (field: SortState['field']) => {
@@ -148,6 +164,10 @@ const PortfolioTracker: React.FC = () => {
             <div className="text-sm text-gray-400 mt-1">
               Value: ${typeof bestPerformer.value_usd === 'number' ? bestPerformer.value_usd.toFixed(2) : 'N/A'}
             </div>
+             {/* Add 24h Volume */}
+            <div className="text-sm text-gray-400 mt-1">
+              24h Volume: {formatVolume(bestPerformer.volume_24h)}
+            </div>
           </div>
         ) : (
           <div className="bg-slate-800/50 rounded-lg p-4 col-span-full sm:col-span-1 xl:col-span-1">
@@ -194,7 +214,7 @@ const PortfolioTracker: React.FC = () => {
                   {/* Yatırım Oranı Header - Sortable by percent_of_total */}
                   <SortableTableHeader
                     field="percent_of_total"
-                    label="Yatırım Oranı"
+                    label="Güncel Oran %" // Changed label here
                     currentSort={sortState}
                     onSort={handleSort}
                     className="text-center" // Center this header

@@ -5,22 +5,42 @@ import { useMarketData } from './MarketDataContext'; // MarketDataContext'ten ge
 // Define the structure for a fixed portfolio coin with a predefined amount
 interface FixedPortfolioCoin {
   symbol: string;
-  amount: number; // Predefined amount for calculation
+  amount: number; // Predefined amount for calculation (used for value/performance)
 }
+
+// Define the structure for the fixed display ratios provided by the user
+const FIXED_DISPLAY_RATIOS: { [key: string]: number } = {
+  'S': 45.67,
+  'BONE': 35.54,
+  'PI': 17.58,
+  'HOT': 0.06,
+  'AREA': 1.12,
+  'SHIB': 0.00,
+  'XEP': 0.00,
+  'OMAX': 0.00,
+  'CSPR': 0.00,
+  'BAD': 0.00,
+  'BTT': 0.00,
+  'HTX': 0.00, // Included HTX as per the latest list provided
+  'BLOK': 0.00,
+};
+
 
 // Define the structure for the coin data enriched with market info and calculated values
 interface EnrichedPortfolioCoin {
   id: string; // Added id for potential future use
   symbol: string;
   name: string;
-  amount: number;
+  amount: number; // Actual amount (used for value calculation)
+  fixedRatioDisplay: number; // The fixed percentage provided by the user (used for display)
   price_usd: number;
   value_usd: number; // amount * price_usd
-  percent_of_total: number; // (value_usd / total_value) * 100
+  percent_of_total: number; // This will now hold fixedRatioDisplay for table display
   percent_change_1h: number | null;
   percent_change_7d: number | null; // Added 7d change
   percent_change_30d: number | null; // Added 30d change
   percent_change_1y: number | null; // Added 1y change
+  volume_24h: number | null; // Added 24h volume
   // Add other relevant fields from CoinPaprika if needed
 }
 
@@ -36,22 +56,22 @@ interface PortfolioContextType {
   error: string | null;
 }
 
-// Define the fixed list of coins and their predefined amounts
+// Define the fixed list of coins and their predefined amounts (using previous amounts for value calculation)
 // These amounts are placeholders and can be adjusted.
 const FIXED_PORTFOLIO_COINS: FixedPortfolioCoin[] = [
-  { symbol: 'SHIB', amount: 1000000 },
-  { symbol: 'HOT', amount: 50000 },
-  { symbol: 'CSPR', amount: 1000 },
-  { symbol: 'BONE', amount: 500 },
-  { symbol: 'BAD', amount: 100000 },
-  { symbol: 'BLOK', amount: 50000 },
-  { symbol: 'XEP', amount: 100000 },
-  { symbol: 'OMAX', amount: 500000 },
-  { symbol: 'AREA', amount: 10000 },
-  // Note: The symbol 'S' from the image is too generic and not found on CoinPaprika.
-  // It has been excluded from this fixed list.
-  // Removed XOR, OMC, LOVELY, and KNINE as requested
-  { symbol: 'S', amount: 1000 }, // Assuming an amount, adjust as needed
+  { symbol: 'S', amount: 0.242519221 },
+  { symbol: 'BONE', amount: 0.314253601 },
+  { symbol: 'PI', amount: 0.072179793 },
+  { symbol: 'HOT', amount: 0.140283158 },
+  { symbol: 'AREA', amount: 0.130255399 },
+  { symbol: 'SHIB', amount: 0.029004557 },
+  { symbol: 'XEP', amount: 0.017231113 },
+  { symbol: 'OMAX', amount: 0.035760613 },
+  { symbol: 'CSPR', amount: 0.008125776 },
+  { symbol: 'BAD', amount: 0.001450946 },
+  { symbol: 'BTT', amount: 0.001976374 },
+  { symbol: 'HTX', amount: 0.000516305 }, // Included HTX as per the latest list
+  { symbol: 'BLOK', amount: 0.003385173 },
 ];
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
@@ -103,6 +123,10 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
               (c: any) => c.symbol.toUpperCase() === fixedCoin.symbol.toUpperCase()
             );
 
+            // Get the fixed display ratio for this coin
+            const fixedRatio = FIXED_DISPLAY_RATIOS[fixedCoin.symbol.toUpperCase()] || 0; // Default to 0 if not found
+
+
             if (paprikaCoin && paprikaCoin.quotes && paprikaCoin.quotes.USD) { // Check if quotes and USD exist
               // Add robust checks for data validity and access via quotes.USD
               const priceUsd = typeof paprikaCoin.quotes.USD.price === 'number' ? paprikaCoin.quotes.USD.price : 0;
@@ -110,12 +134,14 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
               const percentChange7d = typeof paprikaCoin.quotes.USD.percent_change_7d === 'number' ? paprikaCoin.quotes.USD.percent_change_7d : null; // Get 7d change
               const percentChange30d = typeof paprikaCoin.quotes.USD.percent_change_30d === 'number' ? paprikaCoin.quotes.USD.percent_change_30d : null; // Get 30d change
               const percentChange1y = typeof paprikaCoin.quotes.USD.percent_change_1y === 'number' ? paprikaCoin.quotes.USD.percent_change_1y : null; // Get 1y change
+              const volume24h = typeof paprikaCoin.quotes.USD.volume_24h === 'number' ? paprikaCoin.quotes.USD.volume_24h : null; // Get 24h volume
               const coinName = paprikaCoin.name || fixedCoin.symbol; // Use symbol as fallback for name
 
+              // Calculate value based on actual amount and current price
               const valueUsd = fixedCoin.amount * priceUsd;
               currentTotalValue += valueUsd;
 
-              // Calculate the value change in the last hour, 7d, 30d, 1y
+              // Calculate the value change in the last hour, 7d, 30d, 1y based on actual value
               const hourlyChangeValue = valueUsd * (percentChange1h !== null ? percentChange1h / 100 : 0);
               totalHourlyChangeValue += hourlyChangeValue;
 
@@ -133,14 +159,16 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
                 id: paprikaCoin.id, // Include id
                 symbol: fixedCoin.symbol.toUpperCase(), // Use fixedCoin symbol for consistency
                 name: coinName,
-                amount: fixedCoin.amount,
+                amount: fixedCoin.amount, // Store actual amount
+                fixedRatioDisplay: fixedRatio, // Store the fixed ratio for display
                 price_usd: priceUsd,
-                value_usd: valueUsd,
-                percent_of_total: 0, // Will calculate after total value is known
+                value_usd: valueUsd, // Calculated value
+                percent_of_total: fixedRatio, // Use the fixed ratio for display in the table
                 percent_change_1h: percentChange1h,
                 percent_change_7d: percentChange7d, // Add 7d change
                 percent_change_30d: percentChange30d, // Add 30d change
                 percent_change_1y: percentChange1y, // Add 1y change
+                volume_24h: volume24h, // Add 24h volume
               });
             } else {
               console.warn(`CoinPaprika data not found or incomplete for symbol: ${fixedCoin.symbol}`);
@@ -149,26 +177,21 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
                 id: fixedCoin.symbol.toLowerCase(), // Use symbol as a fallback id
                 symbol: fixedCoin.symbol.toUpperCase(),
                 name: fixedCoin.symbol, // Use symbol as name if not found
-                amount: fixedCoin.amount,
+                amount: fixedCoin.amount, // Store actual amount
+                fixedRatioDisplay: fixedRatio, // Store the fixed ratio for display
                 price_usd: 0,
                 value_usd: 0,
-                percent_of_total: 0,
+                percent_of_total: fixedRatio, // Use the fixed ratio for display
                 percent_change_1h: null,
                 percent_change_7d: null, // Set to null if data not found
                 percent_change_30d: null, // Set to null if data not found
                 percent_change_1y: null, // Set to null if data not found
+                volume_24h: null, // Set to null if data not found
               });
             }
           });
 
-          // Calculate percentages after total value is known
-          // Ensure enrichedCoins is an array before mapping
-          const finalEnrichedCoins = Array.isArray(enrichedCoins) ? enrichedCoins.map(coin => ({
-            ...coin,
-            percent_of_total: currentTotalValue > 0 ? (coin.value_usd / currentTotalValue) * 100 : 0,
-          })) : []; // Fallback to empty array if enrichedCoins is not an array
-
-          // Calculate total portfolio performance percentages
+          // Calculate total portfolio performance percentages based on current total value
           const finalPortfolioPerformance1h = currentTotalValue > 0 ? (totalHourlyChangeValue / currentTotalValue) * 100 : 0;
           const finalPortfolioPerformance7d = currentTotalValue > 0 ? (total7dChangeValue / currentTotalValue) * 100 : 0; // Calculate 7d performance
           const finalPortfolioPerformance30d = currentTotalValue > 0 ? (total30dChangeValue / currentTotalValue) * 100 : 0; // Calculate 30d performance
@@ -179,9 +202,9 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           let best = null;
           let highestChange = -Infinity;
 
-          // Ensure finalEnrichedCoins is an array before iterating
-          if (Array.isArray(finalEnrichedCoins)) {
-            finalEnrichedCoins.forEach(coin => {
+          // Ensure enrichedCoins is an array before iterating
+          if (Array.isArray(enrichedCoins)) {
+            enrichedCoins.forEach(coin => {
               // Add type check for percent_change_1h before comparison
               if (coin.percent_change_1h !== null && typeof coin.percent_change_1h === 'number' && coin.percent_change_1h > highestChange) {
                 highestChange = coin.percent_change_1h;
@@ -191,7 +214,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           }
 
 
-          setPortfolioCoins(finalEnrichedCoins);
+          setPortfolioCoins(enrichedCoins); // Use enrichedCoins directly, percent_of_total is already the fixed ratio
           setTotalPortfolioValue(currentTotalValue);
           setPortfolioPerformance1h(finalPortfolioPerformance1h);
           setPortfolioPerformance7d(finalPortfolioPerformance7d); // Set 7d performance state
