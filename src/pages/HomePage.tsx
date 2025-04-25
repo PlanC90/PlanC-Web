@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
             <span className="text-sm ml-2 text-blue-400">SPACE</span>
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-2xl mx-auto">
-            Your ultimate dashboard for tracking crypto market data and managing your portfolio.
+            Crypto united movement community. Strength comes from unity.
           </p>
           <div className="flex justify-center space-x-4">
             {/* Updated "Explore Market" button */}
