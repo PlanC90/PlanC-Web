@@ -4,7 +4,7 @@ import { Wallet, TrendingUp, TrendingDown } from 'lucide-react';
 
 // Define sort state type
 interface SortState {
-  field: 'name' | 'percent_of_total' | 'percent_change_1h' | 'percent_change_7d' | 'percent_change_30d' | 'percent_change_1y' | null;
+  field: 'name' | 'price_usd' | 'percent_change_1h' | 'percent_change_7d' | 'percent_change_30d' | 'percent_change_1y' | null;
   direction: 'asc' | 'desc';
 }
 
@@ -21,7 +21,8 @@ const PortfolioTracker: React.FC = () => {
   } = usePortfolio();
 
   // State for sorting
-  const [sortState, setSortState] = useState<SortState>({ field: null, direction: 'asc' });
+  const [sortState, setSortState] = useState<SortState>({ field: 'price_usd', direction: 'asc' });
+
 
   // Helper function to render performance metric
   const renderPerformance = (label: string, performance: number) => {
@@ -82,6 +83,15 @@ const PortfolioTracker: React.FC = () => {
     return '$' + volume.toFixed(2);
   };
 
+  // Helper function to format price
+  const formatPrice = (price: number | null): string => {
+    if (price === null || typeof price !== 'number') {
+      return 'N/A';
+    }
+    // Always use toFixed(6) for more precision as requested
+    return '$' + price.toFixed(6);
+  };
+
 
   // Handle sorting logic
   const handleSort = (field: SortState['field']) => {
@@ -96,18 +106,26 @@ const PortfolioTracker: React.FC = () => {
     });
   };
 
-  // Sort the portfolio coins based on the current sort state
+  // Sort the portfolio coins based on the current sort state and filter out HTX
   const sortedPortfolioCoins = useMemo(() => {
-    if (!portfolioCoins || portfolioCoins.length === 0 || !sortState.field) {
-      return portfolioCoins; // Return original if no data or no sort field selected
+    if (!portfolioCoins || portfolioCoins.length === 0) {
+      return []; // Return empty array if no data
     }
 
-    const sortableCoins = [...portfolioCoins];
+    // Filter out the coin with symbol "HTX"
+    const filteredCoins = portfolioCoins.filter(coin => coin.symbol !== 'HTX');
+
+    if (!sortState.field) {
+      return filteredCoins; // Return filtered if no sort field selected
+    }
+
+    const sortableCoins = [...filteredCoins];
 
     sortableCoins.sort((a, b) => {
       const field = sortState.field!; // We know field is not null here
-      let aValue = a[field];
-      let bValue = b[field];
+      // Use type assertion to access the correct field name
+      let aValue: any = (a as any)[field];
+      let bValue: any = (b as any)[field];
 
       // Handle null/undefined values for numeric fields
       if (typeof aValue !== 'number' && aValue !== null) aValue = String(aValue).toLowerCase();
@@ -161,8 +179,9 @@ const PortfolioTracker: React.FC = () => {
                  </div>
               )}
             </div>
+            {/* Display the current price of the best performer */}
             <div className="text-sm text-gray-400 mt-1">
-              Value: ${typeof bestPerformer.value_usd === 'number' ? bestPerformer.value_usd.toFixed(2) : 'N/A'}
+              Price: {formatPrice(bestPerformer.price_usd)}
             </div>
              {/* Add 24h Volume */}
             <div className="text-sm text-gray-400 mt-1">
@@ -194,7 +213,7 @@ const PortfolioTracker: React.FC = () => {
           <div className="text-center py-6 text-gray-400">Loading portfolio data...</div>
         ) : error ? (
            <div className="text-center py-6 text-red-400">{error}</div>
-        ) : !Array.isArray(portfolioCoins) || portfolioCoins.length === 0 ? (
+        ) : !Array.isArray(sortedPortfolioCoins) || sortedPortfolioCoins.length === 0 ? ( // Use sortedPortfolioCoins here
           <div className="text-center py-6 text-gray-400">
             No portfolio coins defined or data not found.
           </div>
@@ -211,10 +230,10 @@ const PortfolioTracker: React.FC = () => {
                     onSort={handleSort}
                     className="text-left" // Keep text-left for coin name column
                   />
-                  {/* Yatırım Oranı Header - Sortable by percent_of_total */}
-                  <SortableTableHeader
-                    field="percent_of_total"
-                    label="Güncel Oran %" // Changed label here
+                   {/* Price Header - Sortable by price_usd */}
+                   <SortableTableHeader
+                    field="price_usd"
+                    label="Price"
                     currentSort={sortState}
                     onSort={handleSort}
                     className="text-center" // Center this header
@@ -261,8 +280,9 @@ const PortfolioTracker: React.FC = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-center"> {/* Centered cell content */}
-                        {typeof portfolioCoin.percent_of_total === 'number' ? portfolioCoin.percent_of_total.toFixed(2) : 'N/A'}%
+                       {/* Price Data Cell - Displaying portfolioCoin.price_usd */}
+                       <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-center"> {/* Centered cell content */}
+                        {formatPrice(portfolioCoin.price_usd)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-center"> {/* Centered cell content */}
                         {renderCoinChange(portfolioCoin.percent_change_1h)}
