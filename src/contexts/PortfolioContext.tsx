@@ -9,20 +9,20 @@ interface FixedPortfolioCoin {
 }
 
 // Define the structure for the fixed display ratios provided by the user
+// Updated based on user provided percentages
 const FIXED_DISPLAY_RATIOS: { [key: string]: number } = {
-  'S': 45.67,
-  'BONE': 35.54,
-  'PI': 17.58,
-  'HOT': 0.06,
-  'AREA': 1.12,
-  'SHIB': 0.00,
-  'XEP': 0.00,
-  'OMAX': 0.00,
-  'CSPR': 0.00,
-  'BAD': 0.00,
-  'BTT': 0.00,
-  'HTX': 0.00, // Included HTX as per the latest list provided
-  'BLOK': 0.00,
+  'S': 36.95,
+  'BONE': 30.34,
+  'PI': 6.10,
+  'HOT': 9.92,
+  'AREA': 6.45,
+  'SHIB': 5.05,
+  'XEP': 2.38,
+  'OMAX': 1.49,
+  'CSPR': 0.85,
+  'BAD': 0.08,
+  'BTT': 0.15,
+  'BLOK': 0.09,
 };
 
 
@@ -60,6 +60,7 @@ interface PortfolioContextType {
 
 // Define the fixed list of coins and their predefined amounts (using previous amounts for value calculation)
 // These amounts are placeholders and can be adjusted.
+// Updated based on user provided coin list (removed HTX)
 const FIXED_PORTFOLIO_COINS: FixedPortfolioCoin[] = [
   { symbol: 'S', amount: 0.242519221 },
   { symbol: 'BONE', amount: 0.314253601 },
@@ -72,7 +73,6 @@ const FIXED_PORTFOLIO_COINS: FixedPortfolioCoin[] = [
   { symbol: 'CSPR', amount: 0.008125776 },
   { symbol: 'BAD', amount: 0.001450946 },
   { symbol: 'BTT', amount: 0.001976374 },
-  { symbol: 'HTX', amount: 0.000516305 }, // Included HTX as per the latest list
   { symbol: 'BLOK', amount: 0.003385173 },
 ];
 

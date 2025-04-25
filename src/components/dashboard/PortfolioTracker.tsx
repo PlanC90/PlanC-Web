@@ -4,7 +4,7 @@ import { Wallet, TrendingUp, TrendingDown } from 'lucide-react';
 
 // Define sort state type
 interface SortState {
-  field: 'name' | 'price_usd' | 'percent_change_1h' | 'percent_change_24h' | 'percent_change_7d' | 'percent_change_30d' | 'percent_change_1y' | null;
+  field: 'name' | 'price_usd' | 'percent_change_1h' | 'percent_change_24h' | 'percent_change_7d' | 'percent_change_30d' | 'percent_change_1y' | 'fixedRatioDisplay' | null; // Added fixedRatioDisplay to sortable fields
   direction: 'asc' | 'desc';
 }
 
@@ -266,6 +266,14 @@ const PortfolioTracker: React.FC = () => {
                     onSort={handleSort}
                     className="text-left" // Keep text-left for coin name column
                   />
+                  {/* Investment % Header - Sortable by fixedRatioDisplay */}
+                  <SortableTableHeader
+                    field="fixedRatioDisplay"
+                    label="Investment %"
+                    currentSort={sortState}
+                    onSort={handleSort}
+                    className="text-center" // Center this header
+                  />
                    {/* Price Header - Sortable by price_usd */}
                    <SortableTableHeader
                     field="price_usd"
@@ -323,6 +331,10 @@ const PortfolioTracker: React.FC = () => {
                             <div className="text-sm text-gray-400">{portfolioCoin.symbol}</div>
                           </div>
                         </div>
+                      </td>
+                      {/* Investment % Data Cell - Displaying portfolioCoin.fixedRatioDisplay */}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-center"> {/* Centered cell content */}
+                        {portfolioCoin.fixedRatioDisplay.toFixed(2)}% {/* Display the fixed ratio */}
                       </td>
                        {/* Price Data Cell - Displaying portfolioCoin.price_usd */}
                        <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-center"> {/* Centered cell content */}
