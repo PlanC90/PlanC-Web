@@ -4,7 +4,7 @@ import { Wallet, TrendingUp, TrendingDown } from 'lucide-react';
 
 // Define sort state type
 interface SortState {
-  field: 'name' | 'price_usd' | 'percent_change_1h' | 'percent_change_7d' | 'percent_change_30d' | 'percent_change_1y' | null;
+  field: 'name' | 'price_usd' | 'percent_change_1h' | 'percent_change_24h' | 'percent_change_7d' | 'percent_change_30d' | 'percent_change_1y' | null;
   direction: 'asc' | 'desc';
 }
 
@@ -246,6 +246,14 @@ const PortfolioTracker: React.FC = () => {
                     onSort={handleSort}
                     className="text-center" // Center this header
                   />
+                   {/* 24h Change Header - Sortable by percent_change_24h */}
+                   <SortableTableHeader
+                    field="percent_change_24h"
+                    label="24h %"
+                    currentSort={sortState}
+                    onSort={handleSort}
+                    className="text-center" // Center this header
+                  />
                   <SortableTableHeader
                     field="percent_change_7d"
                     label="7d %"
@@ -286,6 +294,10 @@ const PortfolioTracker: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-center"> {/* Centered cell content */}
                         {renderCoinChange(portfolioCoin.percent_change_1h)}
+                      </td>
+                       {/* 24h Change Data Cell - Displaying portfolioCoin.percent_change_24h */}
+                       <td className="px-6 py-4 whitespace-nowrap text-sm text-center"> {/* Centered cell content */}
+                        {renderCoinChange(portfolioCoin.percent_change_24h)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-center"> {/* Centered cell content */}
                         {renderCoinChange(portfolioCoin.percent_change_7d)}

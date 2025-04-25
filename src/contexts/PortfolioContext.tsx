@@ -41,6 +41,7 @@ interface EnrichedPortfolioCoin {
   percent_change_30d: number | null; // Added 30d change
   percent_change_1y: number | null; // Added 1y change
   volume_24h: number | null; // Added 24h volume
+  percent_change_24h: number | null; // Added 24h change
   // Add other relevant fields from CoinPaprika if needed
 }
 
@@ -131,6 +132,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
               // Add robust checks for data validity and access via quotes.USD
               const priceUsd = typeof paprikaCoin.quotes.USD.price === 'number' ? paprikaCoin.quotes.USD.price : 0;
               const percentChange1h = typeof paprikaCoin.quotes.USD.percent_change_1h === 'number' ? paprikaCoin.quotes.USD.percent_change_1h : null;
+              const percentChange24h = typeof paprikaCoin.quotes.USD.percent_change_24h === 'number' ? paprikaCoin.quotes.USD.percent_change_24h : null; // Get 24h change
               const percentChange7d = typeof paprikaCoin.quotes.USD.percent_change_7d === 'number' ? paprikaCoin.quotes.USD.percent_change_7d : null; // Get 7d change
               const percentChange30d = typeof paprikaCoin.quotes.USD.percent_change_30d === 'number' ? paprikaCoin.quotes.USD.percent_change_30d : null; // Get 30d change
               const percentChange1y = typeof paprikaCoin.quotes.USD.percent_change_1y === 'number' ? paprikaCoin.quotes.USD.percent_change_1y : null; // Get 1y change
@@ -165,6 +167,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
                 value_usd: valueUsd, // Calculated value
                 percent_of_total: fixedRatio, // Use the fixed ratio for display in the table
                 percent_change_1h: percentChange1h,
+                percent_change_24h: percentChange24h, // Add 24h change
                 percent_change_7d: percentChange7d, // Add 7d change
                 percent_change_30d: percentChange30d, // Add 30d change
                 percent_change_1y: percentChange1y, // Add 1y change
@@ -183,6 +186,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
                 value_usd: 0,
                 percent_of_total: fixedRatio, // Use the fixed ratio for display
                 percent_change_1h: null,
+                percent_change_24h: null, // Set to null if data not found
                 percent_change_7d: null, // Set to null if data not found
                 percent_change_30d: null, // Set to null if data not found
                 percent_change_1y: null, // Set to null if data not found
