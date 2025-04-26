@@ -54,7 +54,7 @@ const Header: React.FC = () => {
             <NavLink to="/" onClick={scrollToTop}>Home</NavLink> {/* Add onClick for Home */}
             <NavLink to="/#portfolio" onClick={scrollToPortfolio}>My Portfolio</NavLink>
             {/* Links previously under 'Tools' dropdown, now directly in nav */}
-            <ExternalNavLink href="https://planccoin.netlify.app/">PlanC Coin AI</ExternalNavLink>
+            <ExternalNavLink href="https://coinai.planc.space">PlanC Coin AI</ExternalNavLink> {/* Updated link */}
             {/* AirDrop and Telegram Group links removed */}
             <ExternalNavLink href="https://memextoken.org">MemeX</ExternalNavLink>
           </nav>
@@ -76,7 +76,7 @@ const Header: React.FC = () => {
             <MobileNavLink to="/" onClick={scrollToTop}>Home</MobileNavLink> {/* Add onClick for Home */}
             <MobileNavLink to="/#portfolio" onClick={scrollToPortfolio}>My Portfolio</MobileNavLink>
             {/* Links previously under 'Tools' dropdown, now directly in mobile nav */}
-            <MobileExternalNavLink href="https://planccoin.netlify.app/" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>PlanC Coin AI</MobileExternalNavLink> {/* Use scrollToTop here */}
+            <MobileExternalNavLink href="https://coinai.planc.space" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>PlanC Coin AI</MobileExternalNavLink> {/* Updated link */}
             {/* AirDrop and Telegram Group links removed */}
             <MobileExternalNavLink href="https://memextoken.org" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>MemeX</MobileExternalNavLink> {/* Use scrollToTop here */}
           </div>
