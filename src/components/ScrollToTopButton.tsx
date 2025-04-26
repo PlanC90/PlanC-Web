@@ -30,7 +30,8 @@ const ScrollToTopButton: React.FC = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    // Add 'hidden' by default and 'sm:block' to show on small screens and up
+    <div className="fixed bottom-6 right-6 z-50 hidden sm:block">
       {isVisible && (
         <button
           onClick={scrollToTop}
