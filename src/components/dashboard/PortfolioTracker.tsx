@@ -12,6 +12,7 @@ const PortfolioTracker: React.FC = () => {
   const {
     portfolioCoins,
     portfolioPerformance1h,
+    portfolioPerformance24h, // Consume the new 24h performance
     portfolioPerformance7d,
     portfolioPerformance30d,
     portfolioPerformance1y,
@@ -161,6 +162,7 @@ const PortfolioTracker: React.FC = () => {
       {/* Adjusted grid layout to accommodate 6 items */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
         {renderPerformance("1h Performance", portfolioPerformance1h)}
+        {renderPerformance("24h Performance", portfolioPerformance24h)} {/* Added 24h Performance box */}
         {renderPerformance("7d Performance", portfolioPerformance7d)}
         {renderPerformance("30d Performance", portfolioPerformance30d)}
         {renderPerformance("1y Performance", portfolioPerformance1y)}

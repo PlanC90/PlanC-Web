@@ -12,8 +12,8 @@ const CoinTable: React.FC = () => {
   const [amount, setAmount] = useState<string>('');
 
   // Filter coins based on search query
-  const filteredCoins = coins.filter(coin => 
-    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  const filteredCoins = coins.filter(coin =>
+    coin.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     coin.symbol.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -21,12 +21,12 @@ const CoinTable: React.FC = () => {
   const sortedCoins = [...filteredCoins].sort((a, b) => {
     let aValue = a[sortBy.field as keyof typeof a];
     let bValue = b[sortBy.field as keyof typeof b];
-    
+
     if (typeof aValue === 'string') {
       aValue = aValue.toLowerCase();
       bValue = bValue.toLowerCase();
     }
-    
+
     if (aValue < bValue) return sortBy.direction === 'asc' ? -1 : 1;
     if (aValue > bValue) return sortBy.direction === 'asc' ? 1 : -1;
     return 0;
@@ -87,7 +87,7 @@ const CoinTable: React.FC = () => {
           <Search size={18} className="absolute left-3 top-2.5 text-gray-400" />
         </div>
       </div>
-      
+
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-700">
           <thead className="bg-slate-800">
@@ -96,6 +96,7 @@ const CoinTable: React.FC = () => {
               <TableHeader field="name" label="Name" currentSort={sortBy} onSort={handleSort} />
               <TableHeader field="price_usd" label="Price" currentSort={sortBy} onSort={handleSort} />
               <TableHeader field="percent_change_1h" label="1h %" currentSort={sortBy} onSort={handleSort} />
+              {/* Moved 24h Performance Header next to 1h */}
               <TableHeader field="percent_change_24h" label="24h %" currentSort={sortBy} onSort={handleSort} />
               <TableHeader field="market_cap_usd" label="Market Cap" currentSort={sortBy} onSort={handleSort} />
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -126,8 +127,8 @@ const CoinTable: React.FC = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    typeof coin.percent_change_1h === 'number' && coin.percent_change_1h > 0 
-                      ? 'bg-green-900/30 text-green-400' 
+                    typeof coin.percent_change_1h === 'number' && coin.percent_change_1h > 0
+                      ? 'bg-green-900/30 text-green-400'
                       : 'bg-red-900/30 text-red-400'
                   }`}>
                     {typeof coin.percent_change_1h === 'number' && coin.percent_change_1h > 0 ? (
@@ -138,10 +139,11 @@ const CoinTable: React.FC = () => {
                     {formatPercent(coin.percent_change_1h)}
                   </span>
                 </td>
+                 {/* Moved 24h Performance Data Cell next to 1h */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                    typeof coin.percent_change_24h === 'number' && coin.percent_change_24h > 0 
-                      ? 'bg-green-900/30 text-green-400' 
+                    typeof coin.percent_change_24h === 'number' && coin.percent_change_24h > 0
+                      ? 'bg-green-900/30 text-green-400'
                       : 'bg-red-900/30 text-red-400'
                   }`}>
                     {typeof coin.percent_change_24h === 'number' && coin.percent_change_24h > 0 ? (
@@ -201,7 +203,7 @@ interface TableHeaderProps {
 
 const TableHeader: React.FC<TableHeaderProps> = ({ field, label, currentSort, onSort }) => {
   return (
-    <th 
+    <th
       className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider cursor-pointer hover:text-white transition-colors"
       onClick={() => onSort(field)}
     >

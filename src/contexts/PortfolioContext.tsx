@@ -49,6 +49,7 @@ interface PortfolioContextType {
   portfolioCoins: EnrichedPortfolioCoin[];
   totalPortfolioValue: number; // Keep total value in context for calculations, but remove from display
   portfolioPerformance1h: number; // 1h change based on the fixed portfolio
+  portfolioPerformance24h: number; // Added 24h performance
   portfolioPerformance7d: number; // Added 7d performance
   portfolioPerformance30d: number; // Added 30d performance
   portfolioPerformance1y: number; // Added 1y performance
@@ -90,6 +91,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [portfolioCoins, setPortfolioCoins] = useState<EnrichedPortfolioCoin[]>([]);
   const [totalPortfolioValue, setTotalPortfolioValue] = useState(0);
   const [portfolioPerformance1h, setPortfolioPerformance1h] = useState(0);
+  const [portfolioPerformance24h, setPortfolioPerformance24h] = useState(0); // State for 24h performance
   const [portfolioPerformance7d, setPortfolioPerformance7d] = useState(0); // State for 7d performance
   const [portfolioPerformance30d, setPortfolioPerformance30d] = useState(0); // State for 30d performance
   const [portfolioPerformance1y, setPortfolioPerformance1y] = useState(0); // State for 1y performance
@@ -116,6 +118,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           const enrichedCoins: EnrichedPortfolioCoin[] = [];
           let currentTotalValue = 0;
           let totalHourlyChangeValue = 0;
+          let total24hChangeValue = 0; // Accumulator for 24h value change
           let total7dChangeValue = 0; // Accumulator for 7d value change
           let total30dChangeValue = 0; // Accumulator for 30d value change
           let total1yChangeValue = 0; // Accumulator for 1y value change
@@ -145,9 +148,12 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
               const valueUsd = fixedCoin.amount * priceUsd;
               currentTotalValue += valueUsd;
 
-              // Calculate the value change in the last hour, 7d, 30d, 1y based on actual value
+              // Calculate the value change in the last hour, 24h, 7d, 30d, 1y based on actual value
               const hourlyChangeValue = valueUsd * (percentChange1h !== null ? percentChange1h / 100 : 0);
               totalHourlyChangeValue += hourlyChangeValue;
+
+              const h24ChangeValue = valueUsd * (percentChange24h !== null ? percentChange24h / 100 : 0);
+              total24hChangeValue += h24ChangeValue;
 
               const d7ChangeValue = valueUsd * (percentChange7d !== null ? percentChange7d / 100 : 0);
               total7dChangeValue += d7ChangeValue;
@@ -199,6 +205,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
           // Calculate total portfolio performance percentages based on current total value
           const finalPortfolioPerformance1h = currentTotalValue > 0 ? (totalHourlyChangeValue / currentTotalValue) * 100 : 0;
+          const finalPortfolioPerformance24h = currentTotalValue > 0 ? (total24hChangeValue / currentTotalValue) * 100 : 0; // Calculate 24h performance
           const finalPortfolioPerformance7d = currentTotalValue > 0 ? (total7dChangeValue / currentTotalValue) * 100 : 0; // Calculate 7d performance
           const finalPortfolioPerformance30d = currentTotalValue > 0 ? (total30dChangeValue / currentTotalValue) * 100 : 0; // Calculate 30d performance
           const finalPortfolioPerformance1y = currentTotalValue > 0 ? (total1yChangeValue / currentTotalValue) * 100 : 0; // Calculate 1y performance
@@ -233,6 +240,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           setPortfolioCoins(enrichedCoins); // Use enrichedCoins directly, percent_of_total is already the fixed ratio
           setTotalPortfolioValue(currentTotalValue);
           setPortfolioPerformance1h(finalPortfolioPerformance1h);
+          setPortfolioPerformance24h(finalPortfolioPerformance24h); // Set 24h performance state
           setPortfolioPerformance7d(finalPortfolioPerformance7d); // Set 7d performance state
           setPortfolioPerformance30d(finalPortfolioPerformance30d); // Set 30d performance state
           setPortfolioPerformance1y(finalPortfolioPerformance1y); // Set 1y performance state
@@ -245,6 +253,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
            setPortfolioCoins([]);
            setTotalPortfolioValue(0);
            setPortfolioPerformance1h(0);
+           setPortfolioPerformance24h(0); // Reset 24h performance
            setPortfolioPerformance7d(0); // Reset 7d performance
            setPortfolioPerformance30d(0); // Reset 30d performance
            setPortfolioPerformance1y(0); // Reset 1y performance
@@ -259,6 +268,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setPortfolioCoins([]);
         setTotalPortfolioValue(0);
         setPortfolioPerformance1h(0);
+        setPortfolioPerformance24h(0); // Reset 24h performance
         setPortfolioPerformance7d(0); // Reset 7d performance
         setPortfolioPerformance30d(0); // Reset 30d performance
         setPortfolioPerformance1y(0); // Reset 1y performance
@@ -280,6 +290,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     portfolioCoins,
     totalPortfolioValue, // Still provide total value in context for potential future use/calculations
     portfolioPerformance1h,
+    portfolioPerformance24h, // Provide 24h performance
     portfolioPerformance7d, // Provide 7d performance
     portfolioPerformance30d, // Provide 30d performance
     portfolioPerformance1y, // Provide 1y performance
