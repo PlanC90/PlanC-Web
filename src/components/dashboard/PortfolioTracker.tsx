@@ -159,8 +159,8 @@ const PortfolioTracker: React.FC = () => {
         PlanC Portfolio
       </h2>
 
-      {/* Adjusted grid layout to accommodate 6 items */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
+      {/* Adjusted grid layout to accommodate 7 items on xl screens */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-7 gap-6 mb-8">
         {renderPerformance("1h Performance", portfolioPerformance1h)}
         {renderPerformance("24h Performance", portfolioPerformance24h)} {/* Added 24h Performance box */}
         {renderPerformance("7d Performance", portfolioPerformance7d)}
