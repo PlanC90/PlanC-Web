@@ -67,6 +67,30 @@ const HomePage: React.FC = () => {
         <PriceCharts />
       </section>
 
+      {/* PlanC Coin AI Section - NEW with Background */}
+      <section
+        id="coin-ai"
+        className="relative py-16 px-4 text-center bg-cover bg-center"
+        style={{ backgroundImage: "url('https://hackernoon.imgix.net/images/0x7a042d5263f77878d321eb50af23fd9e2d7ee188-71a335z.png')" }}
+      >
+        {/* Overlay for faded effect */}
+        <div className="absolute inset-0 bg-gray-900 opacity-80"></div> {/* Adjust opacity for desired fade */}
+        <div className="relative z-10 container mx-auto"> {/* Ensure content is above overlay */}
+          <h2 className="text-4xl font-bold mb-6 font-syncopate">PlanC Coin AI</h2>
+          <p className="text-xl mb-8 max-w-2xl mx-auto">
+            Unlock insights with AI. Query any coin and get intelligent analysis powered by PlanC AI.
+          </p>
+          <a
+            href="https://coinai.planc.space/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300 inline-block"
+          >
+            Explore Coin AI
+          </a>
+        </div>
+      </section>
+
       {/* Portfolio Tracker Section */}
       <section id="portfolio" className="py-16 px-4 container mx-auto">
         <h2 className="text-4xl font-bold text-center mb-12 font-syncopate">PlanC Portfolio</h2>
