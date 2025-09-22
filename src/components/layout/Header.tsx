@@ -57,6 +57,7 @@ const Header: React.FC = () => {
             <ExternalNavLink href="https://coinai.planc.space">PlanC Coin AI</ExternalNavLink> {/* Updated link */}
             {/* AirDrop and Telegram Group links removed */}
             <ExternalNavLink href="https://memextoken.org">MemeX</ExternalNavLink>
+            <ExternalNavLink href="https://omax.fun/token/0x022A26D6B758CB5f94671E880BBC22A69582690B">Buy PlanC Token</ExternalNavLink>
           </nav>
 
           {/* Mobile Menu Button */}
@@ -79,6 +80,7 @@ const Header: React.FC = () => {
             <MobileExternalNavLink href="https://coinai.planc.space" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>PlanC Coin AI</MobileExternalNavLink> {/* Updated link */}
             {/* AirDrop and Telegram Group links removed */}
             <MobileExternalNavLink href="https://memextoken.org" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>MemeX</MobileExternalNavLink> {/* Use scrollToTop here */}
+            <MobileExternalNavLink href="https://omax.fun/token/0x022A26D6B758CB5f94671E880BBC22A69582690B" onClick={() => { scrollToTop(); setIsMenuOpen(false); }}>Buy PlanC Token</MobileExternalNavLink>
           </div>
         </div>
       )}
