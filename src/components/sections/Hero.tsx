@@ -26,7 +26,7 @@ const Hero: React.FC = () => {
         <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto">
           Crypto united movement community. Strength comes from unity.
         </p>
-        <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-wrap justify-center items-center space-x-4"> {/* Changed to flex-wrap and added space-x-4 */}
           <a
             href="https://t.me/plancspace"
             target="_blank"

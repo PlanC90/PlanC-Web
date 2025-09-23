@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
       {/* Hero Section with Background Image */}
       <div
         className="relative h-screen bg-cover bg-center flex items-center justify-center text-center"
-        style={{ backgroundImage: "url('https://planc.space/bitcoin.jpg')" }}
+        style={{ backgroundImage: "url('https://images.pexels.com/photos/730547/pexels-photo-730547.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')" }}
       >
         <div className="absolute inset-0 bg-black opacity-60"></div> {/* Overlay */}
         <div className="relative z-10 p-4">
