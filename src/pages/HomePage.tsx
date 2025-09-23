@@ -2,6 +2,7 @@ import React from 'react';
 import MarketOverview from '../components/dashboard/MarketOverview';
 import PortfolioTracker from '../components/dashboard/PortfolioTracker';
 import PriceCharts from '../components/dashboard/PriceCharts';
+import ServicesAndReferences from '../components/dashboard/ServicesAndReferences'; // Import the new component
 
 const HomePage: React.FC = () => {
   // Function to handle smooth scroll to Market Overview section
@@ -95,6 +96,11 @@ const HomePage: React.FC = () => {
       <section id="portfolio" className="py-16 px-4 container mx-auto">
         <h2 className="text-4xl font-bold text-center mb-12 font-syncopate">PlanC Portfolio</h2>
         <PortfolioTracker />
+      </section>
+
+      {/* Services and References Section */}
+      <section id="services-references" className="py-16 px-4 container mx-auto">
+        <ServicesAndReferences />
       </section>
 
       {/* Add more sections as needed */}
